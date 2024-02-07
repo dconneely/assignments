@@ -1,28 +1,4 @@
 databaseChangeLog:
-  - changeSet:
-      id: 1
-      author: dconneely
-      changes:
-        - createTable:
-            tableName: purchase
-            columns:
-              - column:
-                  name: id
-                  type: UUID
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: description
-                  type: VARCHAR(50)
-              - column:
-                  name: transaction_date
-                  type: DATE
-                  constraints:
-                    nullable: false
-              - column:
-                  name: purchase_amount
-                  type: NUMBER(12,2)
-                  constraints:
-                    nullable: false
-
+  - include:
+      file: db.changelog-20240207.yaml
+      relativeToChangelogFile: true

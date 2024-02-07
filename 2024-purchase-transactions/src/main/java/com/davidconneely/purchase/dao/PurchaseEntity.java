@@ -1,4 +1,4 @@
-package com.davidconneely.purchase;
+package com.davidconneely.purchase.dao;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -13,7 +13,6 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 public class PurchaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

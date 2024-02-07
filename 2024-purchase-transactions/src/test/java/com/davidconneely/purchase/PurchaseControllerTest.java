@@ -1,5 +1,8 @@
 package com.davidconneely.purchase;
 
+import com.davidconneely.purchase.dto.IdResponse;
+import com.davidconneely.purchase.dto.PurchaseRequest;
+import com.davidconneely.purchase.dto.PurchaseResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.davidconneely.purchase.TestUtils.newGoodDto;
+import static com.davidconneely.purchase.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -20,29 +23,27 @@ public final class PurchaseControllerTest {
     @Test
     public void testStoreTransaction() {
         PurchaseService service = mock(PurchaseService.class);
-        final UUID id = UUID.randomUUID();
-        when(service.create(any(PurchaseDto.class))).thenReturn(id);
+        when(service.create(any(PurchaseRequest.class))).thenReturn(ID_GOOD);
 
         // so ServletUriComponentsBuilder static methods work:
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
         PurchaseController controller = new PurchaseController(service);
-        ResponseEntity<PurchaseDto> response = controller.storeTransaction(newGoodDto());
+        ResponseEntity<IdResponse> response = controller.storeTransaction(newGoodRequest());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(newGoodDto(), response.getBody());
-        assertTrue(Objects.requireNonNull(response.getHeaders().getLocation()).getPath().contains(id.toString()));
+        assertEquals(ID_GOOD, Objects.requireNonNull(response.getBody()).id());
+        assertTrue(Objects.requireNonNull(response.getHeaders().getLocation()).getPath().contains(ID_GOOD.toString()));
     }
 
     @Test
     public void testRetrieveTransaction() {
         PurchaseService service = mock(PurchaseService.class);
-        when(service.get(any(UUID.class))).thenReturn(Optional.of(newGoodDto()));
+        when(service.get(any(UUID.class))).thenReturn(Optional.of(newGoodResponse()));
 
         PurchaseController controller = new PurchaseController(service);
-        final UUID id = UUID.randomUUID();
-        ResponseEntity<PurchaseDto> response = controller.retrieveTransaction(id);
+        ResponseEntity<PurchaseResponse> response = controller.retrieveTransaction(ID_GOOD);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(newGoodDto(), response.getBody());
+        assertEquals(newGoodResponse(), response.getBody());
     }
 }
