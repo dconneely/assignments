@@ -1,13 +1,13 @@
-
 spring:
   application:
-    name: "purchase"
+    name: purchase
   datasource:
-    url: "jdbc:h2:mem:purchase"
-    username: "sa"
-  ### Spring devtools add-properties and restart should not be enabled in production.
-  #devtools:
+    url: jdbc:h2:mem:purchase
+    username: sa
+    password: changeit
+    ### Spring devtools add-properties and restart should not be enabled in production.
+    #devtools:
     #add-properties: false
-    #restart:
-      #enabled: false
-
+    #restart.enabled: false
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
