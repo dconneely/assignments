@@ -1,17 +1,31 @@
-spring:
+app:
+  purchase:
+    rates-of-exchange-url: https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange
 
+spring:
   application:
     name: purchase
-
   datasource:
     url: jdbc:h2:mem:purchase
     username: sa
     password: changeit
 
-    ### Spring devtools add-properties and restart should not be enabled in production.
-    #devtools:
+  ### For PostgreSQL support, comment out the above datasource, and use this one instead
+  #datasource:
+    #url: jdbc:postgresql://localhost:5433/purchase
+    #username: dconneely
+    #password: dconneely
+
+  ### spring.devtools.add-properties and spring.devtools.restart enabled should be "false" in production.
+  #devtools:
     #add-properties: false
     #restart.enabled: false
 
+  ### spring.jpa.database should be "H2" for the embedded database, or "POSTGRESQL" for production.
   jpa:
-    database: h2
+    database: H2
+
+  ### I personally find the XML changelog a lot more compact, and easier to read, than YAML format:
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+

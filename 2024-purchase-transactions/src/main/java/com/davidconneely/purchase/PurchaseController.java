@@ -3,14 +3,18 @@ package com.davidconneely.purchase;
 import com.davidconneely.purchase.dto.IdResponse;
 import com.davidconneely.purchase.dto.PurchaseRequest;
 import com.davidconneely.purchase.dto.PurchaseResponse;
+import com.davidconneely.purchase.exception.ResourceNotFoundException;
+import com.davidconneely.purchase.exception.TooManyDecimalPlacesException;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URI;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -20,24 +24,23 @@ import java.util.UUID;
 public class PurchaseController {
     private final PurchaseService service;
 
-    @PostMapping
-    public ResponseEntity<IdResponse> storeTransaction(@RequestBody PurchaseRequest dto) {
+    @PostMapping(value = {"", "/"})
+    public ResponseEntity<IdResponse> storeTransaction(@NotNull @RequestBody PurchaseRequest dto) {
         log.info("#storeTransaction(" + dto + ")");
-        if (dto == null || !dto.isValid()) {
-            return ResponseEntity.badRequest().build();
+
+        BigDecimal purchaseAmount = dto.purchaseAmount();
+        if (purchaseAmount.compareTo(purchaseAmount.setScale(2, RoundingMode.HALF_UP)) != 0) {
+            throw new TooManyDecimalPlacesException("purchaseAmount: is not rounded to the nearest cent");
         }
+
         UUID id = service.create(dto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
         return ResponseEntity.created(location).body(new IdResponse(id));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PurchaseResponse> retrieveTransaction(@PathVariable("id") UUID id) {
+    @GetMapping(value = {"/{id}", "/{id}/"})
+    public ResponseEntity<PurchaseResponse> retrieveTransaction(@NotNull @PathVariable("id") UUID id) {
         log.info("#retrieveTransaction(" + id + ")");
-        if (id == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        Optional<PurchaseResponse> opt = service.get(id);
-        return ResponseEntity.of(opt);
+        return ResponseEntity.ok(service.get(id).orElseThrow(() -> new ResourceNotFoundException("UUID provided in URI does not correspond to any stored purchase transaction")));
     }
 }
