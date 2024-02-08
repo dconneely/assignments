@@ -1,16 +1,21 @@
 app:
+  ###
   purchase:
-    rates-of-exchange-url: https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange
+    treasury-fiscalData:
+      base-url: https://api.fiscaldata.treasury.gov/services/api/fiscal_service/
+      rates_of_exchange-endpoint: v1/accounting/od/rates_of_exchange
 
 spring:
   application:
     name: purchase
+
+  ### For H2 support, uncomment this h2 datasource and comment out the postgresql datasource.
   datasource:
     url: jdbc:h2:mem:purchase
     username: sa
     password: changeit
 
-  ### For PostgreSQL support, comment out the above datasource, and use this one instead
+  ### For PostgreSQL support, uncomment this postgresql datasource and comment out the h2 datasource.
   #datasource:
     #url: jdbc:postgresql://localhost:5433/purchase
     #username: dconneely
@@ -25,7 +30,6 @@ spring:
   jpa:
     database: H2
 
-  ### I personally find the XML changelog a lot more compact, and easier to read, than YAML format:
+  ### The XML format is more compact and easier to read than the YAML format.
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.xml
-

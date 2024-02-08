@@ -1,0 +1,36 @@
+{
+  "data": [
+    {
+      "country_currency_desc": "UNITED KINGDOM-POUND STERLING",
+      "exchange_rate": "0.636",
+      "effective_date": "2015-06-30"
+    }
+  ],
+  "meta": {
+    "count": 1,
+    "labels": {
+      "country_currency_desc": "Country - Currency Description",
+      "exchange_rate": "Exchange Rate",
+      "effective_date": "Effective Date"
+    },
+    "dataTypes": {
+      "country_currency_desc": "STRING",
+      "exchange_rate": "NUMBER",
+      "effective_date": "DATE"
+    },
+    "dataFormats": {
+      "country_currency_desc": "String",
+      "exchange_rate": "10.2",
+      "effective_date": "YYYY-MM-DD"
+    },
+    "total-count": 2,
+    "total-pages": 2
+  },
+  "links": {
+    "self": "&page%5Bnumber%5D=1&page%5Bsize%5D=1000",
+    "first": "&page%5Bnumber%5D=1&page%5Bsize%5D=1000",
+    "prev": null,
+    "next": null,
+    "last": "&page%5Bnumber%5D=1&page%5Bsize%5D=1000"
+  }
+}

@@ -39,8 +39,8 @@ public class PurchaseController {
     }
 
     @GetMapping(value = {"/{id}", "/{id}/"})
-    public ResponseEntity<PurchaseResponse> retrieveTransaction(@NotNull @PathVariable("id") UUID id) {
+    public ResponseEntity<PurchaseResponse> retrieveTransaction(@NotNull @PathVariable("id") UUID id, @RequestParam("country_currency_desc") String countryCurrencyDesc) {
         log.info("#retrieveTransaction(" + id + ")");
-        return ResponseEntity.ok(service.get(id).orElseThrow(() -> new ResourceNotFoundException("UUID provided in URI does not correspond to any stored purchase transaction")));
+        return ResponseEntity.ok(service.get(id, countryCurrencyDesc).orElseThrow(() -> new ResourceNotFoundException("UUID provided in URI does not correspond to any stored purchase transaction")));
     }
 }

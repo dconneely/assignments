@@ -39,10 +39,10 @@ public final class PurchaseControllerTest {
     @Test
     public void testRetrieveTransaction() {
         PurchaseService service = mock(PurchaseService.class);
-        when(service.get(any(UUID.class))).thenReturn(Optional.of(newGoodResponse()));
+        when(service.get(any(UUID.class), anyString())).thenReturn(Optional.of(newGoodResponse()));
 
         PurchaseController controller = new PurchaseController(service);
-        ResponseEntity<PurchaseResponse> response = controller.retrieveTransaction(ID_GOOD);
+        ResponseEntity<PurchaseResponse> response = controller.retrieveTransaction(ID_GOOD, COUNTRY_CURRENCY_DESC_UK2015);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(newGoodResponse(), response.getBody());
     }
