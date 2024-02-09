@@ -1,6 +1,7 @@
 package com.davidconneely.purchase.client;
 
-import com.davidconneely.purchase.config.PurchaseProperties;
+import com.davidconneely.purchase.config.ApplicationConfig;
+import com.davidconneely.purchase.config.ClientProperties;
 import com.davidconneely.purchase.exception.RateNotAvailableException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,27 +18,28 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
-@RestClientTest({RatesOfExchangeClient.class, PurchaseProperties.class})
-public class RatesOfExchangeClientTest {
+@RestClientTest(components = {ApplicationConfig.class, ClientProperties.class},
+        properties = {"app.purchase.treasury-fiscaldata.caching-enabled=false"})
+public class LiveRatesOfExchangeClientTest {
     @Autowired
     private RatesOfExchangeClient client;
     @Autowired
     private MockRestServiceServer server;
 
     @Test
-    public void testFetchRateSuccess() {
+    public void testGetSingleRateSuccess() {
         String json = utf8Resource("/RatesOfExchangeClient1.json");
         server.expect(method(HttpMethod.GET)).andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
-        BigDecimal rate = client.fetchRate(COUNTRY_CURRENCY_DESC_UK2015, TRANSACTION_DATE_GOOD);
-        assertEquals(EXCHANGE_RATE_GOOD, rate);
+        BigDecimal exchangeRate = client.getSingleRate(COUNTRY_CURRENCY_DESC_UK2015, TRANSACTION_DATE_GOOD);
+        assertEquals(EXCHANGE_RATE_GOOD, exchangeRate);
     }
 
     @Test
-    public void testFetchRateFailure() {
+    public void testGetSingleRateFailure() {
         String json = utf8Resource("/RatesOfExchangeClient0.json");
         server.expect(method(HttpMethod.GET)).andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
         try {
-            BigDecimal rate = client.fetchRate(COUNTRY_CURRENCY_DESC_UK2015, LocalDate.EPOCH);
+            BigDecimal exchangeRate = client.getSingleRate(COUNTRY_CURRENCY_DESC_UK2015, LocalDate.EPOCH);
             fail();
         } catch (RateNotAvailableException e) {
             assertTrue(e.getStatusCode().isError());

@@ -3,7 +3,6 @@ package com.davidconneely.purchase;
 import com.davidconneely.purchase.dao.PurchaseEntity;
 import com.davidconneely.purchase.dto.PurchaseRequest;
 import com.davidconneely.purchase.dto.PurchaseResponse;
-import com.davidconneely.purchase.exception.RateNotAvailableException;
 
 import java.io.IOException;
 import java.io.InputStream;

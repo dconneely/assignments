@@ -5,10 +5,16 @@
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
     <changeSet author="dconneely" id="1">
         <createTable tableName="purchase">
-            <column name="id" type="UUID"><constraints nullable="false" primaryKey="true" unique="true"/></column>
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
             <column name="description" type="VARCHAR(50)"/>
-            <column name="transaction_date" type="DATE"><constraints nullable="false"/></column>
-            <column name="purchase_amount" type="NUMBER(15,2)"><constraints nullable="false"/></column>
+            <column name="transaction_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="purchase_amount" type="NUMBER(15,2)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

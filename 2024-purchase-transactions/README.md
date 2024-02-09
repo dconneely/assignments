@@ -26,16 +26,14 @@ easy to run the application standalone) or against an external PostgreSQL
 server (more appropriate for a production instance).
 
 The application state is only in the database, so the application can be
-scaled  in production by running multiple instances behind a load-balancer.
+scaled in production by running multiple instances behind a load-balancer.
 
 ## Roadmap for future development
 
-- [X] Add a REST client to call the US Treasury exchange rates API.
-- [X] Use real exchange rate data in the `#retrieveTransaction` endpoint.
-- [ ] Look into caching the results of the REST client locally to avoid over-calling it.
+- [X] Look into caching the results of the REST client locally to avoid over-calling it.
 - [ ] Integration tests, more non-happy path tests?
 - [ ] Use Jakarta-Validation for the check on decimal places
-- [ ] Add documentation of the REST service / test page to call the services.
+- [X] Add documentation of the REST service / test page to call the services.
 - [ ] Consider integration tests to cover odd cases in the exchange rate data.
 - [ ] GitHub Actions to run tests and security scan on each push.
 - [ ] Add documentation on how to run dev / prod (maybe using Maven/Spring profiles?)

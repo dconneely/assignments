@@ -30,7 +30,7 @@ public class PurchaseServiceTest {
         PurchaseConverter converter = mock(PurchaseConverter.class);
         when(converter.entityFromRequest(any(PurchaseRequest.class))).thenCallRealMethod();
         RatesOfExchangeClient client = mock(RatesOfExchangeClient.class);
-        when(client.fetchRate(anyString(), any(LocalDate.class))).thenReturn(EXCHANGE_RATE_GOOD);
+        when(client.getSingleRate(anyString(), any(LocalDate.class))).thenReturn(EXCHANGE_RATE_GOOD);
 
         PurchaseService service = new PurchaseService(repository, converter, client);
         UUID id = service.create(newGoodRequest());
@@ -51,7 +51,7 @@ public class PurchaseServiceTest {
         when(converter.responseFromEntity(any(PurchaseEntity.class), any(BigDecimal.class))).thenCallRealMethod();
         when(converter.convertedAmount(any(BigDecimal.class), any(BigDecimal.class))).thenCallRealMethod();
         RatesOfExchangeClient client = mock(RatesOfExchangeClient.class);
-        when(client.fetchRate(anyString(), any(LocalDate.class))).thenReturn(EXCHANGE_RATE_GOOD);
+        when(client.getSingleRate(anyString(), any(LocalDate.class))).thenReturn(EXCHANGE_RATE_GOOD);
 
         PurchaseService service = new PurchaseService(repository, converter, client);
         PurchaseResponse dto = service.get(ID_GOOD, COUNTRY_CURRENCY_DESC_UK2015).orElse(null);

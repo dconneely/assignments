@@ -1,9 +1,9 @@
 app:
-  ###
   purchase:
     treasury-fiscalData:
       base-url: https://api.fiscaldata.treasury.gov/services/api/fiscal_service/
       rates_of_exchange-endpoint: v1/accounting/od/rates_of_exchange
+      cache-enabled: true
 
 spring:
   application:
@@ -21,10 +21,10 @@ spring:
     #username: dconneely
     #password: dconneely
 
-  ### spring.devtools.add-properties and spring.devtools.restart enabled should be "false" in production.
-  #devtools:
-    #add-properties: false
-    #restart.enabled: false
+  ### spring.devtools.add-properties and spring.devtools.restart.enabled should be "false" in production.
+    #devtools:
+      #add-properties: false
+      #restart.enabled: false
 
   ### spring.jpa.database should be "H2" for the embedded database, or "POSTGRESQL" for production.
   jpa:
@@ -33,3 +33,9 @@ spring:
   ### The XML format is more compact and easier to read than the YAML format.
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.xml
+
+springdoc:
+  ### springdoc.api-docs.enabled and springdoc.swagger-ui.enabled should be "false" in production.
+  api-docs.enabled: true
+  paths-to-exclude: /*/, /*/*/
+  swagger-ui.enabled: true

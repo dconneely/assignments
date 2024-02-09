@@ -6,11 +6,9 @@ import com.davidconneely.purchase.dao.PurchaseRepository;
 import com.davidconneely.purchase.dto.PurchaseConverter;
 import com.davidconneely.purchase.dto.PurchaseRequest;
 import com.davidconneely.purchase.dto.PurchaseResponse;
-import com.davidconneely.purchase.dto.RatesOfExchangeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,8 +26,7 @@ public class PurchaseService {
     }
 
     public Optional<PurchaseResponse> get(UUID id, String countryCurrencyDesc) {
-        Optional<PurchaseEntity> opt = repository.findById(id);
-        // TODO: This uses a hardcoded exchange rate of 1.2864 for now (to make tests work).
-        return opt.map(entity -> new PurchaseConverter().responseFromEntity(entity, client.fetchRate(countryCurrencyDesc, entity.getTransactionDate())));
+        return repository.findById(id).map(entity -> new PurchaseConverter()
+                .responseFromEntity(entity, client.getSingleRate(countryCurrencyDesc, entity.getTransactionDate())));
     }
 }

@@ -15,22 +15,17 @@ import java.util.List;
  */
 public record RatesOfExchangeResponse(
         @NotNull List<Datum> data,
-        @NotNull Meta meta) {
+        Meta meta) {
     public record Datum(
-            @JsonProperty("country_currency_desc")
-            @NotBlank String countryCurrencyDesc,
-            @JsonProperty("exchange_rate")
-            @NotNull @PositiveOrZero BigDecimal exchangeRate,
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-            @JsonProperty("effective_date")
-            @NotNull LocalDate effectiveDate) {
+            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") @JsonProperty("record_date") @NotNull LocalDate recordDate,
+            @JsonProperty("country_currency_desc") @NotBlank String countryCurrencyDesc,
+            @JsonProperty("exchange_rate") @NotNull @PositiveOrZero BigDecimal exchangeRate,
+            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") @JsonProperty("effective_date") @NotNull LocalDate effectiveDate) {
     }
 
     public record Meta(
             @NotNull @PositiveOrZero int count,
-            @JsonProperty("total-count")
-            @NotNull @PositiveOrZero int totalCount,
-            @JsonProperty("total-pages")
-            @NotNull @PositiveOrZero int totalPages) {
+            @JsonProperty("total-count") @NotNull @PositiveOrZero int totalCount,
+            @JsonProperty("total-pages") @NotNull @PositiveOrZero int totalPages) {
     }
 }

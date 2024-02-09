@@ -30,6 +30,7 @@ public class PurchaseEntity {
     private LocalDate transactionDate;
 
     @Column(name = "purchase_amount")
-    @NotNull @Positive
+    @NotNull
+    @Positive
     private BigDecimal purchaseAmount;
 }
