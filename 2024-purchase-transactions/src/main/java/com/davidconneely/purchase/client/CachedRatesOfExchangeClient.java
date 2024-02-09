@@ -1,11 +1,9 @@
 package com.davidconneely.purchase.client;
 
 import com.davidconneely.purchase.config.ClientProperties;
-import com.davidconneely.purchase.dto.DatedExchangeRate;
 import com.davidconneely.purchase.dto.RatesOfExchangeResponse;
 import com.davidconneely.purchase.exception.RateNotAvailableException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +21,6 @@ import static com.davidconneely.purchase.client.ClientUtils.formatLocalDate;
 
 @Slf4j
 public class CachedRatesOfExchangeClient implements RatesOfExchangeClient {
-    @Data
-    public static class Cache {
-        private LocalDate lastUpdateDate;
-        private LocalDate lastRecordDate;
-        private Map<String, NavigableSet<DatedExchangeRate>> data;
-    }
-
     private final ClientProperties properties;
     private final RestTemplate restTemplate;
     private final Cache cache;
@@ -48,12 +39,12 @@ public class CachedRatesOfExchangeClient implements RatesOfExchangeClient {
             updateCache();
         }
         // find the series of exchange rates for the requested countryCurrencyDesc.
-        Map<String, NavigableSet<DatedExchangeRate>> cacheData = cache.getData();
-        NavigableSet<DatedExchangeRate> series = cacheData.get(countryCurrencyDesc);
+        Map<String, NavigableSet<Cache.Entry>> cacheData = cache.getData();
+        NavigableSet<Cache.Entry> series = cacheData.get(countryCurrencyDesc);
         if (series != null) {
             // now find the nearest earlier exchange rate and check its age.
-            DatedExchangeRate dummyRate = new DatedExchangeRate(transactionDate, BigDecimal.ZERO);
-            DatedExchangeRate rate = series.floor(dummyRate);
+            Cache.Entry dummyRate = new Cache.Entry(transactionDate, BigDecimal.ZERO);
+            Cache.Entry rate = series.floor(dummyRate);
             LocalDate sixMonthsEarlier = transactionDate.minusMonths(6);
             if (rate != null && !rate.date().isBefore(sixMonthsEarlier)) {
                 return rate.exchangeRate();
@@ -134,12 +125,12 @@ public class CachedRatesOfExchangeClient implements RatesOfExchangeClient {
      * @param cache the cache to add the data too.
      */
     private static void parseResponseIntoCache(RatesOfExchangeResponse dto, Cache cache) {
-        Map<String, NavigableSet<DatedExchangeRate>> cacheData = cache.getData();
+        Map<String, NavigableSet<Cache.Entry>> cacheData = cache.getData();
         LocalDate lastRecordDate = cache.getLastRecordDate();
         for (RatesOfExchangeResponse.Datum datum : Objects.requireNonNull(dto).data()) {
             String countryCurrencyDesc = datum.countryCurrencyDesc();
-            DatedExchangeRate rate = new DatedExchangeRate(datum.effectiveDate(), datum.exchangeRate());
-            NavigableSet<DatedExchangeRate> series = cacheData.computeIfAbsent(countryCurrencyDesc, k -> new TreeSet<>());
+            Cache.Entry rate = new Cache.Entry(datum.effectiveDate(), datum.exchangeRate());
+            NavigableSet<Cache.Entry> series = cacheData.computeIfAbsent(countryCurrencyDesc, k -> new TreeSet<>());
             series.add(rate);
             LocalDate recordDate = datum.recordDate();
             if (recordDate.isAfter(lastRecordDate)) {
