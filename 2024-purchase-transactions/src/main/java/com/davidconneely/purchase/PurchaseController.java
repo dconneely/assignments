@@ -32,8 +32,7 @@ public class PurchaseController {
     private final PurchaseService service;
 
     @PostMapping({"", "/"})
-    @Operation(summary = "Stores a purchase transaction", parameters = {
-    }, responses = {
+    @Operation(summary = "Stores a purchase transaction", responses = {
         @ApiResponse(responseCode = "201", description = "Created. Returns a transaction ID that can later be used to retrieve this stored purchase", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = IdResponse.class))),
         @ApiResponse(responseCode = "400", description = "Bad Request. Invalid input values, for example if the transactionDate is not parseable, or the purchaseAmount is negative", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class))),
     })

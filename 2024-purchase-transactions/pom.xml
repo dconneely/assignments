@@ -44,7 +44,7 @@
             <artifactId>liquibase-core</artifactId>
         </dependency>
 
-        <!-- comment out `spring-boot-devtools` for production use -->
+        <!-- comment out `spring-boot-devtools` dependency for production usage. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -52,20 +52,21 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- comment out `postgresql` and uncomment `h2` to use H2. -->
+        <!-- comment out `h2` dependency to use an external PostgreSQL server (instead of embedded H2) for production usage. -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- comment out `h2` and uncomment `postgresql` to use PostgreSQL.
+        <!-- uncomment `postgresql` dependency to use an external PostgreSQL server (instead of embedded H2) for production usage.
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
         -->
+
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
@@ -76,11 +77,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- comment out `springdoc-openapi-starter-webmvc-ui` dependency for production usage. -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.3.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.restdocs</groupId>
             <artifactId>spring-restdocs-mockmvc</artifactId>

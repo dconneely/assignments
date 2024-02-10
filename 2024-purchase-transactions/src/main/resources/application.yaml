@@ -9,24 +9,24 @@ spring:
   application:
     name: purchase
 
-  ### For H2 support, uncomment this h2 datasource and comment out the postgresql datasource.
+  ###  comment out `h2` datasource to use an external PostgreSQL server (instead of embedded H2) for production usage.
   datasource:
     url: jdbc:h2:mem:purchase
     username: sa
-    password: changeit
+    password: changeit # (not a real password)
 
-  ### For PostgreSQL support, uncomment this postgresql datasource and comment out the h2 datasource.
+  ### uncomment `postgresql` datasource to use an external PostgreSQL server (instead of embedded H2) for production usage.
   #datasource:
     #url: jdbc:postgresql://localhost:5433/purchase
     #username: dconneely
-    #password: dconneely
+    #password: dconneely # (not a real password!)
 
-  ### spring.devtools.add-properties and spring.devtools.restart.enabled should be "false" in production.
+  ### uncomment `spring.devtools` properties for production usage (to disable `spring-boot-devtools` functionality).
     #devtools:
       #add-properties: false
       #restart.enabled: false
 
-  ### spring.jpa.database should be "H2" for the embedded database, or "POSTGRESQL" for production.
+  ### change `spring.jpa.database` property from "H2" to "POSTGRESQL" for production usage.
   jpa:
     database: H2
 
@@ -35,7 +35,7 @@ spring:
     change-log: classpath:/db/changelog/db.changelog-master.xml
 
 springdoc:
-  ### springdoc.api-docs.enabled and springdoc.swagger-ui.enabled should be "false" in production.
-  api-docs.enabled: true
+  ### uncomment `springdoc.api-docs.enabled` and `springdoc.swagger-ui.enabled` properties for production usage (to disable `springdoc-openapi-starter-webmvc-ui` functionality).
+  #api-docs.enabled: false
+  #swagger-ui.enabled: false
   paths-to-exclude: /*/, /*/*/
-  swagger-ui.enabled: true
