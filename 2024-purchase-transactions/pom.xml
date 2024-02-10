@@ -59,13 +59,12 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- uncomment `postgresql` dependency to use an external PostgreSQL server (instead of embedded H2) for production usage.
+        <!-- uncomment `postgresql` dependency to use an external PostgreSQL server (instead of embedded H2) for production usage. -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
-        -->
 
         <dependency>
             <groupId>io.micrometer</groupId>

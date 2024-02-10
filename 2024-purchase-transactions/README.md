@@ -1,7 +1,7 @@
 # `purchase`
 
-This application stores and retrieves purchase transactions, with currency conversion, as described in the
-`WEX TAG and Gateways Product Brief.pdf` document.
+This application stores and retrieves purchase transactions, with currency conversion, as described in the Product Brief
+PDF document which was provided.
 
 When run, the application exposes two REST endpoints:
 
@@ -67,29 +67,35 @@ the last quarter or later once a day.
 
 ## Development vs. production usage
 
-The requirements document requested a production-ready instance. Without using a docker-compose file (which would
-lead to a dependency on a locally-installed Docker and Docker Compose as well as a JRE/JDK, and so break the standalone
-requirement) I could not use a production-ready database. So instead, I've provided a default configuration that uses
-the H2 embedded database, but which can easily be reconfigured to use PostgreSQL with a few configuration changes
-(see [`application.yaml`](src/main/resources/application.yaml) and [`pom.xml`](pom.xml)). So the application is
-"ready for production" with minimal effort.
+The requirements document requested a production-ready instance, but also requires it to be a standalone application.
+So I've provided a default configuration that uses the H2 embedded database, but which can easily be reconfigured to use
+PostgreSQL by configuration (see [`application.yaml`](src/main/resources/application.yaml)), and there is a Docker
+Compose [`compose.yml`](compose.yml) file to do this. The application is "ready for production" with minimal effort.
 
 For development, I included the Spring Boot DevTools, which enable certain useful but insecure features. They can be
-turned off  by configuration (see [`application.yaml`](src/main/resources/application.yaml)) or even better by removing
-`spring-boot-devtools` dependency altogether (see [`pom.xml`](pom.xml)).
+turned off by configuration (see [`application.yaml`](src/main/resources/application.yaml)) or even better by removing
+the `spring-boot-devtools` dependency altogether (see [`pom.xml`](pom.xml)).
 
 The Swagger-UI and OpenAPI api-docs are exposed in the application because they are very useful in providing easy
-access to try the REST endpoints (see [/swagger-ui.html](http://localhost:8080/swagger-ui.html)). They can be turned off
-by configuration (see [`application.yaml`](src/main/resources/application.yaml)) or even better by removing
+access to try the REST endpoints (see [/swagger-ui.html](http://localhost:8080/swagger-ui.html)). They can be turned off by configuration (see
+[`application.yaml`](src/main/resources/application.yaml)) or even better by removing the
 `springdoc-openapi-starter-webmvc-ui` dependency altogether (see [`pom.xml`](pom.xml)).
+
+The optional Docker Compose [`compose.yml`](compose.yml) file builds an application image from a
+[`Dockerfile`](Dockerfile), and runs the application as a container alongside a PostgreSQL database container (and the
+[`.env`](.env) file will override the database configuration properties in
+[`application.yaml`](src/main/resources/application.yaml) so that the PostgreSQL container is used as a database by the
+application container).
 
 ## Roadmap for future development
 
 - [ ] Use `jakarta-validation` for the check on decimal places in the `#storeTransaction` controller method.
 - [ ] Integration tests to cover more unhappy-paths, and odd cases in the exchange rate data.
 - [ ] Enable monitoring with Prometheus or Graphite (or even just JMX).\
-  &nbsp; (Note the `spring-boot-actuator-starter` is already enabled and provides some simple monitoring endpoints)
+      (Note the `spring-boot-actuator-starter` is already enabled and provides some simple monitoring endpoints)
 - [ ] Consider database-based caching to avoid horizontal-scaling increasing Treasury.gov web API usage.
+- [ ] Add nginx or some load-balancer / TLS termination to the compose file.\
+      A production system should allow multiple application instances and should use secure HTTPS.
 
 ## Anomalies in the Treasury.gov Rates of Exchange data
 
@@ -111,7 +117,8 @@ by configuration (see [`application.yaml`](src/main/resources/application.yaml))
    Example 1: Many countries use the `Dollar`, `Peso`, `Pound` or `Shilling` but these are not the same currencies.\
    Example 2: Many countries use the `Euro` or `E. Caribbean Dollar` and these _are_ in fact the same currencies.
 5. There are some unexplained large gaps in the data.\
-   Example: No rates for `St. Lucia` for over 4 years during 2015-03-31 through 2019-09-30.
+   Example 1: No rates for `St. Lucia` for over 4 years during 2015-03-31 through 2019-09-30.\
+   Example 2: Most (`Cyprus` is an exception) eurozone countries are replaced by `Euro Zone` from 2022 onwards.
 6. Some rates seem to have suspicious values at certain times:\
    Example 1: `Lebanon-Pound` has a fixed exchange rate of `1500.0` during 2008-09-30 through 2023-02-15, but then it
    changes to `15000.0` during 2023-02-15 through 2023-12-31. (This does appear to be correct on research: a 90%

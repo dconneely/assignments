@@ -1,0 +1,28 @@
+services:
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASS}
+      SPRING_JPA_DATABASE: POSTGRESQL
+    restart: on-failure:3
+    networks:
+      - purchase-network
+    ports:
+      - "8080:8080"
+  db:
+    image: "postgres:16.1-bullseye"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      POSTGRES_DB: ${POSTGRES_DB}
+    restart: on-failure:3
+    networks:
+      - purchase-network
+    expose:
+      - 5432
+networks:
+  purchase-network:
