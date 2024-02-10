@@ -101,7 +101,7 @@ public class CachedRatesOfExchangeClient implements RatesOfExchangeClient {
         String ratesOfExchangeEndpoint = properties.getRatesOfExchangeEndpoint();
         // Note just using String.format would not escape URL-unfriendly characters (e.g. '&' or '#') in the parameters.
         URI uri = UriComponentsBuilder.fromUriString(baseURL).path(ratesOfExchangeEndpoint)
-                .queryParam("fields", "record_data,country_currency_desc,exchange_rate,effective_date")
+                .queryParam("fields", "record_date,country_currency_desc,exchange_rate,effective_date")
                 .queryParam("filter", String.format("effective_date:gte:%s", formatLocalDate(since)))
                 .queryParam("format", "json")
                 .queryParam("page[number]", Integer.toString(pageNumber))

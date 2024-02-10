@@ -44,7 +44,7 @@ public class LiveRatesOfExchangeClient implements RatesOfExchangeClient {
         String ratesOfExchangeEndpoint = properties.getRatesOfExchangeEndpoint();
         LocalDate sixMonthsEarlier = transactionDate.minusMonths(6);
         URI uri = UriComponentsBuilder.fromUriString(baseURL).path(ratesOfExchangeEndpoint)
-                .queryParam("fields", "record_data,country_currency_desc,exchange_rate,effective_date")
+                .queryParam("fields", "record_date,country_currency_desc,exchange_rate,effective_date")
                 .queryParam("format", "json")
                 .queryParam("filter", String.format("country_currency_desc:in:(%s),effective_date:lte:%s,effective_date:gte:%s",
                         countryCurrencyDesc, formatLocalDate(transactionDate), formatLocalDate(sixMonthsEarlier)))
