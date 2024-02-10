@@ -89,12 +89,13 @@ application container).
 
 ## Roadmap for future development
 
+- [ ] Need a better way of injecting the database credentials that is not in version control.
 - [ ] Use `jakarta-validation` for the check on decimal places in the `#storeTransaction` controller method.
 - [ ] Integration tests to cover more unhappy-paths, and odd cases in the exchange rate data.
 - [ ] Enable monitoring with Prometheus or Graphite (or even just JMX).\
       (Note the `spring-boot-actuator-starter` is already enabled and provides some simple monitoring endpoints)
 - [ ] Consider database-based caching to avoid horizontal-scaling increasing Treasury.gov web API usage.
-- [ ] Add nginx or some load-balancer / TLS termination to the compose file.\
+- [ ] Add nginx or some load-balancer / TLS termination to the compose file. What about authentication?\
       A production system should allow multiple application instances and should use secure HTTPS.
 
 ## Anomalies in the Treasury.gov Rates of Exchange data

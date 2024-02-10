@@ -18,7 +18,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
 
 @RestClientTest(components = {ApplicationConfig.class, ClientProperties.class},
-        properties = {"app.purchase.treasury-fiscaldata.caching-enabled=true"})
+        properties = {"app.purchase.treasury-fiscalData.cache-enabled=true"})
 public class CachedRatesOfExchangeClientTest {
     @Autowired
     private RatesOfExchangeClient client;
