@@ -30,6 +30,7 @@ public class LiveRatesOfExchangeClientTest {
     public void testGetSingleRateSuccess() {
         String json = utf8Resource("/RatesOfExchangeClient1.json");
         server.expect(method(HttpMethod.GET)).andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
+        assertInstanceOf(LiveRatesOfExchangeClient.class, client);
         BigDecimal exchangeRate = client.getSingleRate(COUNTRY_CURRENCY_DESC_UK2015, TRANSACTION_DATE_GOOD);
         assertEquals(EXCHANGE_RATE_GOOD, exchangeRate);
     }
@@ -38,6 +39,7 @@ public class LiveRatesOfExchangeClientTest {
     public void testGetSingleRateFailure() {
         String json = utf8Resource("/RatesOfExchangeClient0.json");
         server.expect(method(HttpMethod.GET)).andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
+        assertInstanceOf(LiveRatesOfExchangeClient.class, client);
         try {
             BigDecimal exchangeRate = client.getSingleRate(COUNTRY_CURRENCY_DESC_UK2015, LocalDate.EPOCH);
             fail();

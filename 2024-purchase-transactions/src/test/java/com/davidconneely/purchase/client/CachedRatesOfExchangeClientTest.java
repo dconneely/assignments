@@ -28,6 +28,7 @@ public class CachedRatesOfExchangeClientTest {
     @Test
     public void testGetSingleRateSuccess() {
         server.expect(method(HttpMethod.GET)).andRespond(withServerError()); // shouldn't hit the server
+        assertInstanceOf(CachedRatesOfExchangeClient.class, client);
         BigDecimal exchangeRate = client.getSingleRate(COUNTRY_CURRENCY_DESC_UK2015, TRANSACTION_DATE_GOOD);
         assertEquals(EXCHANGE_RATE_GOOD, exchangeRate);
     }
@@ -35,6 +36,7 @@ public class CachedRatesOfExchangeClientTest {
     @Test
     public void testGetSingleRateFailure() {
         server.expect(method(HttpMethod.GET)).andRespond(withServerError()); // shouldn't hit the server
+        assertInstanceOf(CachedRatesOfExchangeClient.class, client);
         try {
             BigDecimal exchangeRate = client.getSingleRate(COUNTRY_CURRENCY_DESC_UK2015, LocalDate.EPOCH);
             fail();

@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.davidconneely.purchase.client.ClientUtils.formatLocalDate;
 
@@ -24,31 +26,45 @@ public class CachedRatesOfExchangeClient implements RatesOfExchangeClient {
     private final ClientProperties properties;
     private final RestTemplate restTemplate;
     private final Cache cache;
+    private final ReadWriteLock lock;
 
     public CachedRatesOfExchangeClient(ClientProperties properties, ObjectMapper objectMapper, RestTemplateBuilder restTemplateBuilder) {
         this.properties = properties;
         this.restTemplate = restTemplateBuilder.build();
         this.cache = newPrepoulatedCache(objectMapper);
+        this.lock = new ReentrantReadWriteLock();
     }
 
     public BigDecimal getSingleRate(String countryCurrencyDesc, LocalDate transactionDate) {
+        lock.readLock().lock();
         // do we need to update the cache? is it more than a day since the last update, and is the date requested in the last quarter or later (which are still being updated)?
         LocalDate lastRecordDate = cache.getLastRecordDate();
         LocalDate lastUpdateDate = cache.getLastUpdateDate();
         if (transactionDate.isAfter(lastRecordDate) && LocalDate.now().isAfter(lastUpdateDate)) {
-            updateCache();
-        }
-        // find the series of exchange rates for the requested countryCurrencyDesc.
-        Map<String, NavigableSet<Cache.Entry>> cacheData = cache.getData();
-        NavigableSet<Cache.Entry> series = cacheData.get(countryCurrencyDesc);
-        if (series != null) {
-            // now find the nearest earlier exchange rate and check its age.
-            Cache.Entry dummyRate = new Cache.Entry(transactionDate, BigDecimal.ZERO);
-            Cache.Entry rate = series.floor(dummyRate);
-            LocalDate sixMonthsEarlier = transactionDate.minusMonths(6);
-            if (rate != null && !rate.date().isBefore(sixMonthsEarlier)) {
-                return rate.exchangeRate();
+            lock.readLock().unlock(); // must release read lock before acquiring write lock
+            lock.writeLock().lock();
+            try {
+                updateCache();
+                lock.readLock().lock(); // downgrade by acquiring read lock before releasing write lock
+            } finally {
+                lock.writeLock().unlock();
             }
+        }
+        try {
+            // find the series of exchange rates for the requested countryCurrencyDesc.
+            Map<String, NavigableSet<Cache.Entry>> cacheData = cache.getData();
+            NavigableSet<Cache.Entry> series = cacheData.get(countryCurrencyDesc);
+            if (series != null) {
+                // now find the nearest earlier exchange rate and check its age.
+                Cache.Entry dummyRate = new Cache.Entry(transactionDate, BigDecimal.ZERO);
+                Cache.Entry rate = series.floor(dummyRate);
+                LocalDate sixMonthsEarlier = transactionDate.minusMonths(6);
+                if (rate != null && !rate.date().isBefore(sixMonthsEarlier)) {
+                    return rate.exchangeRate();
+                }
+            }
+        } finally {
+            lock.readLock().unlock();
         }
         throw new RateNotAvailableException("there was no available exchange rate within 6 months before the purchase transaction date");
     }
