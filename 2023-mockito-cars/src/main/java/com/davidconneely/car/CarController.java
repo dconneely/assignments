@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Locale;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Controller
 public class CarController {
@@ -18,12 +18,25 @@ public class CarController {
         this.repository = repository;
     }
 
+    private static <T> Stream<T> iterableToStream(Iterable<T> iter) {
+        return StreamSupport.stream(iter.spliterator(), false);
+    }
+
+    private static <T> ResponseEntity<Iterable<T>> responseOf(Iterable<T> iter) {
+        return iter.iterator().hasNext() ? ResponseEntity.ok(iter) : ResponseEntity.notFound().build();
+    }
+
     @GetMapping({"/cars", "/cars/"})
     @ResponseBody
-    public ResponseEntity<List<Car>> getCars(@RequestParam(value = "model", required = false) String model) {
-        List<Car> cars = model == null ? repository.findAll() : repository.findAll().stream()
-                .filter(car -> car.model().regionMatches(true, 0, model, 0, model.length()))
-                .collect(Collectors.toList());
-        return cars.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(cars);
+    public ResponseEntity<Iterable<Car>> getCars(@RequestParam(value = "model", required = false) String model) {
+        Iterable<Car> cars = repository.findAll();
+        if (model != null) {
+            // case-insensitive substring match (using US English casing rules):
+            String lcModel = model.toLowerCase(Locale.US);
+            cars = iterableToStream(cars)
+                    .filter(car -> car.model().toLowerCase(Locale.US).contains(lcModel))
+                    .toList();
+        }
+        return responseOf(cars);
     }
 }
