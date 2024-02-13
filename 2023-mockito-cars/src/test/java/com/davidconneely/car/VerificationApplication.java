@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.TestConfiguration;
 
 @TestConfiguration(proxyBeanMethods = false)
-public class TestCarApplication {
+public class VerificationApplication {
     public static void main(String[] args) {
-        SpringApplication.from(CarApplication::main).with(TestCarApplication.class).run(args);
+        SpringApplication.from(Application::main).with(VerificationApplication.class).run(args);
     }
 }

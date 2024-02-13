@@ -1,16 +1,17 @@
-package com.davidconneely.car;
+package com.davidconneely.car.controller;
 
+import com.davidconneely.car.entity.Car;
+import com.davidconneely.car.repository.CarRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Controller
+@RequestMapping("/cars")
 public class CarController {
     private final CarRepository repository;
 
@@ -26,7 +27,7 @@ public class CarController {
         return iter.iterator().hasNext() ? ResponseEntity.ok(iter) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping({"/cars", "/cars/"})
+    @GetMapping({"", "/"})
     @ResponseBody
     public ResponseEntity<Iterable<Car>> getCars(@RequestParam(value = "model", required = false) String model) {
         Iterable<Car> cars = repository.findAll();
@@ -38,5 +39,11 @@ public class CarController {
                     .toList();
         }
         return responseOf(cars);
+    }
+
+    @GetMapping({"/{id}", "/{id}/"})
+    @ResponseBody
+    public ResponseEntity<Car> getCar(@PathVariable(value = "id") long id) {
+        return ResponseEntity.of(repository.findById(id));
     }
 }
