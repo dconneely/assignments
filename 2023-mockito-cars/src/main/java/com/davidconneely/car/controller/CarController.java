@@ -31,9 +31,9 @@ public class CarController {
     @ResponseBody
     public ResponseEntity<Iterable<Car>> getCars(@RequestParam(value = "model", required = false) String model) {
         Iterable<Car> cars = repository.findAll();
-        if (model != null) {
+        if (model != null && !model.isBlank()) {
             // case-insensitive substring match (using US English casing rules):
-            String lcModel = model.toLowerCase(Locale.US);
+            String lcModel = model.trim().toLowerCase(Locale.US);
             cars = iterableToStream(cars)
                     .filter(car -> car.model().toLowerCase(Locale.US).contains(lcModel))
                     .toList();
