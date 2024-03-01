@@ -70,7 +70,7 @@ the last quarter or later once a day.
 The requirements document requested a production-ready instance, but also requires it to be a standalone application.
 So I've provided a default configuration that uses the H2 embedded database, but which can easily be reconfigured to use
 PostgreSQL by configuration (see [`application.yaml`](src/main/resources/application.yaml)), and there is a Docker
-Compose [`compose.yml`](compose.yml) file to do this. The application is "ready for production" with minimal effort.
+Compose [`compose.yaml`](compose.yaml) file to do this. The application is "ready for production" with minimal effort.
 
 For development, I included the Spring Boot DevTools, which enable certain useful but insecure features. They can be
 turned off by configuration (see [`application.yaml`](src/main/resources/application.yaml)) or even better by removing
@@ -81,7 +81,7 @@ access to try the REST endpoints (see [/swagger-ui.html](http://localhost:8080/s
 [`application.yaml`](src/main/resources/application.yaml)) or even better by removing the
 `springdoc-openapi-starter-webmvc-ui` dependency altogether (see [`pom.xml`](pom.xml)).
 
-The optional Docker Compose [`compose.yml`](compose.yml) file builds an application image from a
+The optional Docker Compose [`compose.yaml`](compose.yaml) file builds an application image from a
 [`Dockerfile`](Dockerfile), and runs the application as a container alongside a PostgreSQL database container (and the
 [`.env`](.env) file will override the database configuration properties in
 [`application.yaml`](src/main/resources/application.yaml) so that the PostgreSQL container is used as a database by the
@@ -95,7 +95,7 @@ application container).
 - [ ] Enable monitoring with Prometheus or Graphite (or even just JMX).\
       (Note the `spring-boot-actuator-starter` is already enabled and provides some simple monitoring endpoints)
 - [ ] Consider database-based caching to avoid horizontal-scaling increasing Treasury.gov web API usage.
-- [ ] Add nginx or some load-balancer / TLS termination to the compose file. What about authentication?\
+- [ ] Add nginx or some load-balancer / TLS termination to the Docker Compose file. What about authentication?\
       A production system should allow multiple application instances and should use secure HTTPS.
 
 ## Anomalies in the Treasury.gov Rates of Exchange data
