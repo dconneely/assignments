@@ -5,6 +5,10 @@ Data analysis problem - finding bitmap targets in a bitmap field.
 Note: the code for this task was written in 2011, before Java 8 was released,
 so there may be code that could be refactored to use newer language features.
 
+This problem was still in use until as late as 2016 (look at DMCA take-down
+notices on GitHub) or 2018 (some GitHub repositories that recent exist), so it
+was very long-lived.
+
 ## Problem notes
 
 ### Overview
