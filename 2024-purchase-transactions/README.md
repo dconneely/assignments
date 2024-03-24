@@ -1,7 +1,8 @@
 # `purchase`
 
 This application stores and retrieves purchase transactions, with currency conversion, as described in the Product Brief
-PDF document which was provided.
+PDF document which was provided to define the task. That same document also explicitly instructed me to publish this
+project to a **public** GitHub repository in my own GitHub account, which is this repository.
 
 When run, the application exposes two REST endpoints:
 
