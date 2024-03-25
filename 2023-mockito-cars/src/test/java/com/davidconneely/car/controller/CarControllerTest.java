@@ -24,11 +24,11 @@ final class CarControllerTest {
     void testGetAll() {
         CarRepository mockRepo = mock(CarRepository.class);
         when(mockRepo.findAll()).thenReturn(List.of(
-                new Car(1L, "model1"),
-                new Car(2L, "model2"),
-                new Car(3L, "model3")));
+                new Car(1L, "manufacturer1", "model1"),
+                new Car(2L, "manufacturer2", "model2"),
+                new Car(3L, "manufacturer3", "model3")));
         CarController controller = new CarController(mockRepo);
-        ResponseEntity<Iterable<Car>> response = controller.getCars(null);
+        ResponseEntity<Iterable<Car>> response = controller.getCars(null, null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(3, iterableToList(response.getBody()).size());
     }
@@ -37,11 +37,11 @@ final class CarControllerTest {
     void testGetAllModel() {
         CarRepository mockRepo = mock(CarRepository.class);
         when(mockRepo.findAll()).thenReturn(List.of(
-                new Car(1L, "model1"),
-                new Car(2L, "model2"),
-                new Car(3L, "model3")));
+                new Car(1L, "manufacturer1", "model1"),
+                new Car(2L, "manufacturer2", "model2"),
+                new Car(3L, "manufacturer3", "model3")));
         CarController controller = new CarController(mockRepo);
-        ResponseEntity<Iterable<Car>> response = controller.getCars("Model3");
+        ResponseEntity<Iterable<Car>> response = controller.getCars(null, "Model3");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, iterableToList(response.getBody()).size());
     }
@@ -50,11 +50,11 @@ final class CarControllerTest {
     void testGetAllEmpty() {
         CarRepository mockRepo = mock(CarRepository.class);
         when(mockRepo.findAll()).thenReturn(List.of(
-                new Car(1L, "model1"),
-                new Car(2L, "model2"),
-                new Car(3L, "model3")));
+                new Car(1L, "manufacturer1", "model1"),
+                new Car(2L, "manufacturer2", "model2"),
+                new Car(3L, "manufacturer3", "model3")));
         CarController controller = new CarController(mockRepo);
-        ResponseEntity<Iterable<Car>> response = controller.getCars("model99");
+        ResponseEntity<Iterable<Car>> response = controller.getCars(null, "model99");
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
     }
@@ -62,7 +62,7 @@ final class CarControllerTest {
     @Test
     void testGetOneExists() {
         CarRepository mockRepo = mock(CarRepository.class);
-        when(mockRepo.findById(1L)).thenReturn(Optional.of(new Car(1L, "model1")));
+        when(mockRepo.findById(1L)).thenReturn(Optional.of(new Car(1L, "manufacturer1", "model1")));
         CarController controller = new CarController(mockRepo);
         ResponseEntity<Car> response = controller.getCar(1L);
         assertEquals(HttpStatus.OK, response.getStatusCode());

@@ -9,11 +9,11 @@ import java.util.Optional;
 @Repository
 public class CarRepository {
     private final Map<Long, Car> cars = Map.of(
-            1L, new Car(1L, "Avensis"),
-            2L, new Car(2L, "Aygo"),
-            3L, new Car(3L, "C-HR"),
-            4L, new Car(4L, "RAV4"),
-            5L, new Car(5L, "Yaris"));
+            1L, new Car(1L, "Ford", "Focus"),
+            2L, new Car(2L, "Honda", "Civic"),
+            3L, new Car(3L, "Kia", "Ceed"),
+            4L, new Car(4L, "SEAT", "Leon"),
+            5L, new Car(5L, "Volkswagen", "Golf"));
 
     public Iterable<Car> findAll() {
         return cars.values();

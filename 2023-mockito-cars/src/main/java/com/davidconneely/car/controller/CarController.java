@@ -29,15 +29,17 @@ public class CarController {
 
     @GetMapping({"", "/"})
     @ResponseBody
-    public ResponseEntity<Iterable<Car>> getCars(@RequestParam(value = "model", required = false) String model) {
+    public ResponseEntity<Iterable<Car>> getCars(
+            @RequestParam(value="manufacturer", required = false) String manufacturer,
+            @RequestParam(value = "model", required = false) String model) {
         Iterable<Car> cars = repository.findAll();
-        if (model != null && !model.isBlank()) {
-            // case-insensitive substring match (using US English casing rules):
-            String lcModel = model.trim().toLowerCase(Locale.US);
-            cars = iterableToStream(cars)
-                    .filter(car -> car.model().toLowerCase(Locale.US).contains(lcModel))
-                    .toList();
-        }
+        // case-insensitive substring match (using US English casing rules):
+        String lcManufacturer = manufacturer != null ? manufacturer.trim().toLowerCase(Locale.US) : "";
+        String lcModel = model != null ? model.trim().toLowerCase(Locale.US) : "";
+        cars = iterableToStream(cars)
+                .filter(car -> car.manufacturer().toLowerCase(Locale.US).contains(lcManufacturer))
+                .filter(car -> car.model().toLowerCase(Locale.US).contains(lcModel))
+                .toList();
         return responseOf(cars);
     }
 
