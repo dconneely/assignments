@@ -4,7 +4,7 @@ import com.davidconneely.purchase.config.ClientProperties;
 import com.davidconneely.purchase.dto.RatesOfExchangeResponse;
 import com.davidconneely.purchase.exception.RateNotAvailableException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;

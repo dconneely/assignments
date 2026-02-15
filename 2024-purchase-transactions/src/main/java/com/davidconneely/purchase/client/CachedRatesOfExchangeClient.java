@@ -3,9 +3,9 @@ package com.davidconneely.purchase.client;
 import com.davidconneely.purchase.config.ClientProperties;
 import com.davidconneely.purchase.dto.RatesOfExchangeResponse;
 import com.davidconneely.purchase.exception.RateNotAvailableException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -28,10 +28,10 @@ public class CachedRatesOfExchangeClient implements RatesOfExchangeClient {
     private final Cache cache;
     private final ReadWriteLock lock;
 
-    public CachedRatesOfExchangeClient(ClientProperties properties, ObjectMapper objectMapper, RestTemplateBuilder restTemplateBuilder) {
+    public CachedRatesOfExchangeClient(ClientProperties properties, JsonMapper jsonMapper, RestTemplateBuilder restTemplateBuilder) {
         this.properties = properties;
         this.restTemplate = restTemplateBuilder.build();
-        this.cache = newPrepoulatedCache(objectMapper);
+        this.cache = newPrepoulatedCache(jsonMapper);
         this.lock = new ReentrantReadWriteLock();
     }
 
@@ -72,13 +72,13 @@ public class CachedRatesOfExchangeClient implements RatesOfExchangeClient {
     /**
      * So we are not constantly hitting the API, we pre-populate the cache with data from a resource.
      */
-    private static Cache newPrepoulatedCache(ObjectMapper objectMapper) {
+    private static Cache newPrepoulatedCache(JsonMapper jsonMapper) {
         Cache cache = new Cache();
         cache.setData(new HashMap<>());
         cache.setLastRecordDate(LocalDate.EPOCH);
         cache.setLastUpdateDate(LocalDate.EPOCH);
         try (InputStream in = RatesOfExchangeClient.class.getResourceAsStream("/RprtRateXchg_20010331_20231231.json")) {
-            RatesOfExchangeResponse dto = objectMapper.readValue(in, RatesOfExchangeResponse.class);
+            RatesOfExchangeResponse dto = jsonMapper.readValue(in, RatesOfExchangeResponse.class);
             parseResponseIntoCache(dto, cache);
         } catch (IOException e) {
             log.info("#newPrepopulatedCache: Unexpected exception reading resource", e);

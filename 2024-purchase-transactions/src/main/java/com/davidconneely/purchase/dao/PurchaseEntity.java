@@ -24,7 +24,6 @@ public class PurchaseEntity {
     @Size(max = 50)
     private String description;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "transaction_date")
     @NotNull
     private LocalDate transactionDate;
