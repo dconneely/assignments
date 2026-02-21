@@ -1,3 +1,3 @@
 # `task-car`
 
-This is a simple Spring Boot demonstration application. It is my own work and not copied.
+This is a small Spring Boot demonstration application I put together as a simple example.

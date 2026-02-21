@@ -2,50 +2,41 @@ package com.davidconneely.car.controller;
 
 import com.davidconneely.car.entity.Car;
 import com.davidconneely.car.repository.CarRepository;
+import java.util.Collection;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Locale;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
-@Controller
+@RestController
 @RequestMapping("/cars")
 public class CarController {
-    private final CarRepository repository;
+  private final CarRepository repository;
 
-    public CarController(CarRepository repository) {
-        this.repository = repository;
-    }
+  public CarController(CarRepository repository) {
+    this.repository = repository;
+  }
 
-    private static <T> Stream<T> iterableToStream(Iterable<T> iter) {
-        return StreamSupport.stream(iter.spliterator(), false);
-    }
+  private static boolean containsIgnoreCase(String str, String search) {
+    return search.isEmpty() || str.toLowerCase().contains(search.toLowerCase());
+  }
 
-    private static <T> ResponseEntity<Iterable<T>> responseOf(Iterable<T> iter) {
-        return iter.iterator().hasNext() ? ResponseEntity.ok(iter) : ResponseEntity.notFound().build();
-    }
+  @GetMapping
+  public Collection<Car> getCars(
+      @RequestParam(required = false) String manufacturer,
+      @RequestParam(required = false) String model) {
+    String mfr = manufacturer != null ? manufacturer.trim() : "";
+    String mdl = model != null ? model.trim() : "";
+    return repository.findAll().stream()
+        .filter(car -> containsIgnoreCase(car.manufacturer(), mfr))
+        .filter(car -> containsIgnoreCase(car.model(), mdl))
+        .toList();
+  }
 
-    @GetMapping({"", "/"})
-    @ResponseBody
-    public ResponseEntity<Iterable<Car>> getCars(
-            @RequestParam(value="manufacturer", required = false) String manufacturer,
-            @RequestParam(value = "model", required = false) String model) {
-        Iterable<Car> cars = repository.findAll();
-        // case-insensitive substring match (using US English casing rules):
-        String lcManufacturer = manufacturer != null ? manufacturer.trim().toLowerCase(Locale.US) : "";
-        String lcModel = model != null ? model.trim().toLowerCase(Locale.US) : "";
-        cars = iterableToStream(cars)
-                .filter(car -> car.manufacturer().toLowerCase(Locale.US).contains(lcManufacturer))
-                .filter(car -> car.model().toLowerCase(Locale.US).contains(lcModel))
-                .toList();
-        return responseOf(cars);
-    }
-
-    @GetMapping({"/{id}", "/{id}/"})
-    @ResponseBody
-    public ResponseEntity<Car> getCar(@PathVariable(value = "id") long id) {
-        return ResponseEntity.of(repository.findById(id));
-    }
+  @GetMapping("/{id}")
+  public ResponseEntity<Car> getCar(@PathVariable long id) {
+    return ResponseEntity.of(repository.findById(id));
+  }
 }
