@@ -18,8 +18,8 @@ spring:
   ### uncomment `postgresql` datasource to use an external PostgreSQL server (instead of embedded H2) for production usage.
   #datasource:
     #url: jdbc:postgresql://localhost:5433/purchase
-    #username: dconneely
-    #password: dconneely # (not a real password!)
+    #username: username
+    #password: password # (not a real password!)
 
   ### uncomment `spring.devtools` properties for production usage (to disable `spring-boot-devtools` functionality).
     #devtools:

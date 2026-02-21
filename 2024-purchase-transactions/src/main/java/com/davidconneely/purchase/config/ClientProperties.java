@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "app.purchase.treasury-fiscaldata")
 @Data
 public class ClientProperties {
-        private String baseURL = "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/";
-        private String ratesOfExchangeEndpoint = "v1/accounting/od/rates_of_exchange";
-        private boolean cacheEnabled = true;
+  private String baseURL = "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/";
+  private String ratesOfExchangeEndpoint = "v1/accounting/od/rates_of_exchange";
+  private boolean cacheEnabled = true;
 }
