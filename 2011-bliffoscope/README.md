@@ -1,29 +1,23 @@
 # `task-scope`
 
-Data analysis problem - finding bitmap targets in a bitmap field.
+Data analysis problem - finding bitmap targets in a bitmap field as described
+[here on Stack Overflow](https://stackoverflow.com/questions/14246120/locate-an-ascii-art-image-inside-a-body-of-text-with-a-certain-toleration-for-er).
 
-Note: the code for this task was written in 2011, before Java 8 was released, so there is some code
+Note: the original code for this task was written before Java 8 was released, so there is code
 that could be refactored to better use newer Java language features such as `try`-with-resources,
 `record`s, pattern-matching, `List.of()`, etc. I have only updated the build script to Gradle and
-applied a standard formatting to the Java code.
-
-The original problem was provided as a PDF file and some text files. It was still being used for
-interviews until as late as 2016 and some GitHub repositories with solutions from as recently as
-2018 can be found.
+applied a standard Spotless formatting to the Java code.
 
 ## Problem notes
 
 ### Overview
 
-The brief is to spend a few hours on this problem, rather than days or weeks, so pattern-recognition
-algorithms like _SIFT_, and so on, are not going to be appropriate (since unfortunately I know
-nothing about them).
+I spent a few hours on this problem, rather than days or weeks, so pattern-recognition algorithms
+like _SIFT_, and so on, were not going to be appropriate (since unfortunately I know nothing about
+them).
 
-I have therefore assumed that the scope images of the torpedo and starship shapes will not be
-rotated, scaled or deformed in any way (perhaps the anti-neutrino detector can only detect neutrinos
-that hit it exactly perpendicularly over a surface and the starships and torpedoes have to stay
-precisely-oriented in order to remain cloaked ;)), and that the shapes will only be subject to the
-noise described in the task instructions PDF file.
+I therefore assumed that the scope images of the torpedo and starship shapes would not be rotated,
+scaled or deformed in any way, and that the shapes will only be subject to noise.
 
 The data consisting of '`+`' and '` `' characters can be considered to be a monochrome bitmap image,
 and we want to do something that is a little like image convolution, using the starship (or torpedo)
@@ -31,7 +25,7 @@ shapes as the kernels, to find the maximal values in the resultant matrix. There
 shortcut way to do this using the Java 2D API or some other image-processing code, but I have not
 tried that.
 
-Instead, I store the image pixels as an array of arrays of `boolean` values.
+Instead, I stored the image pixels as an array of arrays of `boolean` values.
 
 The same class (`Bitmap`) is used to represent both the ideal target images and the scope image. As
 well as the image pixels, this class stores the target's midpoint coordinates (this is redundant
@@ -44,12 +38,12 @@ scope image and target at every possible location of the target in the scope ima
 location keeps track of the number of "on" pixels in the result of the "AND" in another array (as a
 fraction of the maximal match value - called "confidence" in the code).
 
-One minor complication is that I've assumed the most useful target location would be the midpoint of
+One minor complication is that I assumed the most useful target location would be the midpoint of
 the target, rather than its top-left corner, so there are some adjustments made before the
 coordinates are returned.
 
-I've assumed that scope images do not wrap around in any way, and have also made the assumption that
-any target will be located entirely within the scope image (so no partial targets).
+I assumed that scope images do not wrap around in any way, and also made the assumption that any
+target will be located entirely within the scope image (so no partial targets).
 
 ### Issues found #1
 
