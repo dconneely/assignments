@@ -1,3 +1,15 @@
+// spring-boot-gradle-plugin's buildpack-platform module still pulls in commons-compress:1.27.1,
+// which depends on the vulnerable commons-lang3:3.16.0 (GHSA-j288-q9x7-2f5v / Dependabot alert #1).
+// Force it to a patched version on the plugin classpath until Spring Boot bumps commons-compress
+// to 1.28.0+ upstream. Remove once that lands.
+buildscript {
+    configurations.classpath {
+        resolutionStrategy {
+            force("org.apache.commons:commons-lang3:3.20.0")
+        }
+    }
+}
+
 plugins {
     java
     id("org.springframework.boot") version "4.1.1"
