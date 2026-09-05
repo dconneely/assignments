@@ -1,0 +1,35 @@
+version: 2
+
+updates:
+  - package-ecosystem: "gradle"
+    directories:
+      - "/*"
+    schedule:
+      interval: "weekly"
+      day: "thursday"
+      time: "20:05"
+      timezone: "Europe/London"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "thursday"
+      time: "20:05"
+      timezone: "Europe/London"
+
+  - package-ecosystem: "docker"
+    directory: "/2024-purchase-transactions"
+    schedule:
+      interval: "weekly"
+      day: "thursday"
+      time: "20:05"
+      timezone: "Europe/London"
+
+  - package-ecosystem: "docker-compose"
+    directory: "/2024-purchase-transactions"
+    schedule:
+      interval: "weekly"
+      day: "thursday"
+      time: "20:05"
+      timezone: "Europe/London"
