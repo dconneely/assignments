@@ -1,0 +1,41 @@
+app:
+  purchase:
+    treasury-fiscalData:
+      base-url: https://api.fiscaldata.treasury.gov/services/api/fiscal_service/
+      rates_of_exchange-endpoint: v1/accounting/od/rates_of_exchange
+      cache-enabled: true
+
+spring:
+  application:
+    name: purchase
+
+  ###  comment out `h2` datasource to use an external PostgreSQL server (instead of embedded H2) for production usage.
+  datasource:
+    url: jdbc:h2:mem:purchase
+    username: sa
+    password: changeit # (not a real password)
+
+  ### uncomment `postgresql` datasource to use an external PostgreSQL server (instead of embedded H2) for production usage.
+  #datasource:
+    #url: jdbc:postgresql://localhost:5433/purchase
+    #username: username
+    #password: password # (not a real password!)
+
+  ### uncomment `spring.devtools` properties for production usage (to disable `spring-boot-devtools` functionality).
+    #devtools:
+      #add-properties: false
+      #restart.enabled: false
+
+  ### change `spring.jpa.database` property from "H2" to "POSTGRESQL" for production usage.
+  jpa:
+    database: H2
+
+  ### The XML format is more compact and easier to read than the YAML format.
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+
+springdoc:
+  ### uncomment `springdoc.api-docs.enabled` and `springdoc.swagger-ui.enabled` properties for production usage (to disable `springdoc-openapi-starter-webmvc-ui` functionality).
+  #api-docs.enabled: false
+  #swagger-ui.enabled: false
+  paths-to-exclude: /*/, /*/*/

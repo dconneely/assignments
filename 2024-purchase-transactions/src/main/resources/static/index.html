@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html lang="">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>purchase</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+<p>The <code>purchase</code> application provides two REST endpoints:</p>
+<ul>
+    <li><strong><code>POST /purchase/</code></strong>
+        - store a new purchase transaction provided in the request body, return a unique ID that can be later used to
+        retrieve the purchase transaction.</li>
+    <li><strong><code>GET /purchase/<em>{id}</em>?country_currency_desc=<em>{countryCurrencyDesc}</em></code></strong>
+        - retrieve a previously-stored purchase transaction by ID, and additionally return the purchase amount converted
+        into another currency.</li>
+</ul>
+<p>Try these endpoints out using the <a href="/swagger-ui.html">Swagger-UI</a> page.</p>
+</body>
+</html>
