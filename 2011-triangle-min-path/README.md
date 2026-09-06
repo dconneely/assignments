@@ -1,11 +1,10 @@
-# `task-triangle`
+# `2011-triangle-min-path`
 
 Find the minimal cost path through a triangle.
 
 Note: the code for this task was written in 2011, before Java 8 was released, so there is some code
 that could be refactored to better use newer Java language features such as `Math.addExact`,
-`record`s, streams and lambdas, etc. I have only updated the build script to Gradle and applied a
-standard formatting to the Java code.
+`record`s, streams and lambdas, etc.
 
 Identical problems have been published since at least 2013 on *LeetCode* (see
 [120. Triangle](https://leetcode.com/problems/triangle/))

@@ -1,12 +1,11 @@
-# `task-scope`
+# `2011-bliffoscope`
 
 Data analysis problem - finding bitmap targets in a bitmap field as described
 [here on Stack Overflow](https://stackoverflow.com/questions/14246120/locate-an-ascii-art-image-inside-a-body-of-text-with-a-certain-toleration-for-er).
 
 Note: the original code for this task was written before Java 8 was released, so there is code
 that could be refactored to better use newer Java language features such as `try`-with-resources,
-`record`s, pattern-matching, `List.of()`, etc. I have only updated the build script to Gradle and
-applied a standard Spotless formatting to the Java code.
+`record`s, pattern-matching, `List.of()`, etc.
 
 ## Problem notes
 

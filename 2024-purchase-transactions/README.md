@@ -1,4 +1,4 @@
-# `task-purchase`
+# `2024-purchase-transactions`
 
 This application stores and retrieves purchase transactions with currency conversion, as described
 in the Product Brief PDF provided for the task. The brief required the solution to be published to a
@@ -14,9 +14,6 @@ When run, the application exposes two REST endpoints:
 ## Implementation notes
 
 This is a Spring Boot application.
-
-The repository includes the Gradle Wrapper to automatically invoke the build, so it is not necessary
-to install Gradle separately.
 
 Database schema migration is done using Liquibase, so is database-independent. So the same code can
 run against both the H2 embedded database (makes it easy to run the application standalone) or
