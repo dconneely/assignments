@@ -5,7 +5,7 @@ JAR_FILE="build/libs/scope-1.0.0-SNAPSHOT.jar"
 
 if [ ! -f "$JAR_FILE" ]; then
     echo "Building project..."
-    ./gradlew -q --console=plain jar
+    ../gradlew -q --console=plain jar
 fi
 
 if [ $# -eq 0 ]; then

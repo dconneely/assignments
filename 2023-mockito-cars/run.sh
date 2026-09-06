@@ -6,4 +6,4 @@ echo "Starting application..."
 echo "Open http://localhost:8080/ to view the application"
 echo ""
 
-./gradlew bootRun
+../gradlew bootRun

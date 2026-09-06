@@ -1,3 +1,5 @@
+import com.diffplug.gradle.spotless.SpotlessExtension
+
 // spring-boot-gradle-plugin's buildpack-platform module still pulls in commons-compress:1.27.1,
 // which depends on the vulnerable commons-lang3:3.16.0 (GHSA-j288-q9x7-2f5v / Dependabot alert #1).
 // Force it to a patched version on the plugin classpath until Spring Boot bumps commons-compress
@@ -14,8 +16,10 @@ plugins {
     java
     id("org.springframework.boot") version "4.1.1"
     id("io.spring.dependency-management") version "1.1.7"
-    id("com.diffplug.spotless") version "8.10.1"
 }
+
+// Version is managed by the root build.gradle.kts (apply false there).
+apply(plugin = "com.diffplug.spotless")
 
 group = "com.davidconneely"
 version = "1.0.0-SNAPSHOT"
@@ -42,7 +46,7 @@ tasks.test {
     useJUnitPlatform()
 }
 
-spotless {
+configure<SpotlessExtension> {
     java {
         googleJavaFormat()
     }

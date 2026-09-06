@@ -1,8 +1,12 @@
+import com.diffplug.gradle.spotless.SpotlessExtension
+
 plugins {
     java
     application
-    id("com.diffplug.spotless") version "8.10.1"
 }
+
+// Version is managed by the root build.gradle.kts (apply false there).
+apply(plugin = "com.diffplug.spotless")
 
 group = "com.davidconneely"
 version = "1.0.0-SNAPSHOT"
@@ -38,7 +42,7 @@ tasks.jar {
     }
 }
 
-spotless {
+configure<SpotlessExtension> {
     java {
         googleJavaFormat()
     }

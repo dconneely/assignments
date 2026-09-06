@@ -15,11 +15,6 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        project:
-          - 2023-mockito-cars
-          - 2011-bliffoscope
-          - 2011-triangle-min-path
-          - 2024-purchase-transactions
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -31,7 +26,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
 
       - name: "Check formatting"
-        run: ./gradlew -p ${{ matrix.project }} spotlessCheck
+        run: ./gradlew spotlessCheck --continue
 
       - name: "Build and test"
-        run: ./gradlew -p ${{ matrix.project }} build
+        run: ./gradlew build --continue
